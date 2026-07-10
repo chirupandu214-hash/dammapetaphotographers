@@ -200,7 +200,15 @@ Balance:
 <h2>
 Fund Report
 </h2>
+<button
 
+onClick={()=>
+window.print()
+}
+
+>
+Print
+</button>
 
 <table
 style={{
