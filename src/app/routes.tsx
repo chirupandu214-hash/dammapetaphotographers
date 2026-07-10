@@ -1,5 +1,5 @@
+import EditMemberPage from "@/pages/members/EditMemberPage";
 import { Routes, Route, Navigate } from "react-router-dom";
-
 import LoginPage from "@/pages/auth/LoginPage";
 import DashboardPage from "@/pages/dashboard/DashboardPage";
 import MembersPage from "@/pages/members/MembersPage";
