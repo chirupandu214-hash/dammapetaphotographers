@@ -1,5 +1,6 @@
+import FundPage from "@/pages/fund/FundPage";
 import MemberProfilePage from "@/pages/members/MemberProfilePage";
-import QRVerificationPagefrom "@/pages/qr/QRVerificationPage";
+import QRVerificationPage from "@/pages/qr/QRVerificationPage";
 import EditMemberPage from "@/pages/members/EditMemberPage";
 import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "@/pages/auth/LoginPage";
@@ -39,7 +40,21 @@ element={
 </ProtectedRoute>
 }
 />
+<Route
 
+path="/fund"
+
+element={
+
+<ProtectedRoute>
+
+<FundPage/>
+
+</ProtectedRoute>
+
+}
+
+/>
 
 <Route
 path="/verify/:memberId"
