@@ -53,7 +53,15 @@ item.year
 ]
 );
 
+<button
 
+onClick={
+downloadReportPDF
+}
+
+>
+Download PDF
+</button>
 exportPDF(
 
 "Fund Collection Report",
