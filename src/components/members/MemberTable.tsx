@@ -1,3 +1,4 @@
+<th>Actions</th>
 interface Props {
   members: any[];
   onDelete: (id: number) => void;
