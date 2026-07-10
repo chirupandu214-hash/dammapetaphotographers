@@ -6,7 +6,10 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 import AppLayout from "@/layouts/AppLayout";
-import MemberTable from "@/components/members/MemberTable";
+import <MemberTable
+  members={filteredMembers}
+  onDelete={handleDelete}
+/>
 import { getMembers } from "@/services/memberService";
 
 export default function MembersPage() {
