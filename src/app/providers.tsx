@@ -1,9 +1,23 @@
-import type { ReactNode } from "react";
-
-interface Props {
-  children: ReactNode;
+import {
+AuthProvider
 }
+from "@/context/AuthContext";
 
-export default function Providers({ children }: Props) {
-  return <>{children}</>;
+
+export default function Providers({
+children
+}:{
+children:React.ReactNode
+}){
+
+return(
+
+<AuthProvider>
+
+{children}
+
+</AuthProvider>
+
+);
+
 }
