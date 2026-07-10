@@ -1,3 +1,4 @@
+import ProfessionalMemberCard from "@/components/members/ProfessionalMemberCard";
 import { useEffect,useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -50,7 +51,9 @@ Member Profile
 {
 member ?
 
-<MemberCard member={member}/>
+<ProfessionalMemberCard
+ member={member}
+/>
 
 :
 
