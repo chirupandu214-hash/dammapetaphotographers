@@ -1,5 +1,7 @@
 interface Props {
   members: any[];
+  onDelete: (id: number) => void;
+
 }
 
 export default function MemberTable({ members }: Props) {
