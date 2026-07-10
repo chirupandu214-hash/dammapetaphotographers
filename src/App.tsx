@@ -1,7 +1,7 @@
 export default function App() {
   return (
-    <div>
-      Dhammapeta Photographers Association Portal
+    <div style={{ padding: "20px", fontSize: "30px" }}>
+      ✅ Dammapeta Portal Working
     </div>
   );
 }
