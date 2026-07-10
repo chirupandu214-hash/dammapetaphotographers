@@ -1,6 +1,17 @@
-import type { ResourceConfig } from "@/types";
+export interface ResourceConfig {
+  name: string;
+  label: string;
+  path: string;
+  fields?: {
+    name: string;
+    label: string;
+    type: string;
+  }[];
+}
 
 export const adminResources: ResourceConfig[] = [
+  // your resources here
+];
   {
     table: "members",
     title: "Member Management",
