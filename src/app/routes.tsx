@@ -6,7 +6,7 @@ import { AppLayout } from "@/components/layout/AppLayout";
 import { ProtectedRoute } from "@/components/layout/ProtectedRoute";
 import { ResourcePage } from "@/components/crud/ResourcePage";
 
-import { LoginPage } from "@/pages/auth/LoginPage";
+import LoginPage from "@/pages/auth/LoginPage";
 import { ForgotPasswordPage } from "@/pages/auth/ForgotPasswordPage";
 import { ChangePasswordPage } from "@/pages/auth/ChangePasswordPage";
 
