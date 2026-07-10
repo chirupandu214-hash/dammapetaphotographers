@@ -51,6 +51,27 @@ interface MemberFormData {
   status: string;
 
 }
+let photoUrl =
+  form.photo;
+
+
+if(photoFile){
+
+  photoUrl =
+    await uploadMemberPhoto(
+      photoFile
+    );
+
+}
+
+
+const finalData = {
+
+ ...form,
+
+ photo: photoUrl
+
+};
 async function handleSubmit(
   e: React.FormEvent<HTMLFormElement>
 ) {
