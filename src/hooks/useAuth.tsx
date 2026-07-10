@@ -1,105 +1,41 @@
-import React,
-{
-createContext,
-useContext,
-useEffect,
-useState
-}
-from "react";
+import { createContext, useContext, useState, ReactNode } from "react";
 
+type User = {
+  id: string;
+  name: string;
+  role: string;
+} | null;
 
-import {supabase} from "@/lib/supabase";
-
-
-const AuthContext=createContext<any>(null);
-
-
-export function AuthProvider(
-{
-children
-}:{
-children:React.ReactNode
-}){
-
-
-const [user,setUser]=useState<any>(null);
-const [profile,setProfile]=useState<any>(null);
-
-
-useEffect(()=>{
-
-
-supabase.auth.getSession()
-.then(({data})=>{
-
-setUser(data.session?.user || null);
-
-});
-
-
-const {
-data:listener
-}=supabase.auth.onAuthStateChange(
-(_event,session)=>{
-
-setUser(session?.user || null);
-
-}
-);
-
-
-return ()=>{
-listener.subscription.unsubscribe();
+type AuthContextType = {
+  user: User;
+  login: (user: NonNullable<User>) => void;
+  logout: () => void;
 };
 
-
-},[]);
-
-
-
-useEffect(()=>{
-
-if(user){
-
-supabase
-.from("profiles")
-.select("*")
-.eq("id",user.id)
-.single()
-.then(({data})=>{
-
-setProfile(data);
-
+const AuthContext = createContext<AuthContextType>({
+  user: null,
+  login: () => {},
+  logout: () => {},
 });
 
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<User>(null);
 
+  const login = (user: NonNullable<User>) => {
+    setUser(user);
+  };
+
+  const logout = () => {
+    setUser(null);
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
-},[user]);
-
-
-
-return(
-
-<AuthContext.Provider
-value={{
-user,
-profile
-}}
->
-
-{children}
-
-</AuthContext.Provider>
-
-);
-
-}
-
-
-
-export function useAuth(){
-
-return useContext(AuthContext);
-
+export function useAuth() {
+  return useContext(AuthContext);
 }
