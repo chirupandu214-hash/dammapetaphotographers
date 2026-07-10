@@ -1,10 +1,21 @@
-import type { Member } from "@/types/member";
-
 interface Props {
-  members: Member[];
+  members: any[];
 }
 
 export default function MemberTable({ members }: Props) {
+  if (members.length === 0) {
+    return (
+      <h3
+        style={{
+          textAlign: "center",
+          color: "#666",
+        }}
+      >
+        No members found.
+      </h3>
+    );
+  }
+
   return (
     <table
       style={{
@@ -25,7 +36,7 @@ export default function MemberTable({ members }: Props) {
       </thead>
 
       <tbody>
-        {members.map((member: any) => (
+        {members.map((member) => (
           <tr key={member.id}>
             <td>{member.id}</td>
             <td>{member.member_id}</td>
