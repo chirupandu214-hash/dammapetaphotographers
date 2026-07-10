@@ -68,6 +68,8 @@ async function handleSubmit(
   try {
 
     setLoading(true);
+    const [photoFile,setPhotoFile] =
+  useState<File | null>(null);
 
 
     if (editMode && initialData) {
