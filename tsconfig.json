@@ -1,20 +1,24 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "CommonJS",
-    "moduleResolution": "Bundler",
-    "rootDir": "./src",
-    "outDir": "./dist",
+    "useDefineForClassFields": true,
+    "lib": ["DOM", "DOM.Iterable", "ES2020"],
 
-    "strict": true,
+    "allowJs": false,
+    "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true,
+    "strict": true,
 
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
-    "sourceMap": true
+    "isolatedModules": true,
+    "noEmit": true,
+
+    "jsx": "react-jsx",
+    "types": ["node", "vite/client"]
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src"]
 }
