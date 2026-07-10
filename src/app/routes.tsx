@@ -1,3 +1,5 @@
+import MemberProfilePage from "@/pages/members/MemberProfilePage";
+import QRVerificationPagefrom "@/pages/qr/QRVerificationPage";
 import EditMemberPage from "@/pages/members/EditMemberPage";
 import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "@/pages/auth/LoginPage";
@@ -29,6 +31,21 @@ export default function AppRoutes() {
       <EditMemberPage />
     </ProtectedRoute>
   }
+/><Route
+path="/members/profile/:id"
+element={
+<ProtectedRoute>
+<MemberProfilePage/>
+</ProtectedRoute>
+}
+/>
+
+
+<Route
+path="/verify/:memberId"
+element={
+<QRVerificationPage/>
+}
 />
       <Route
         path="/members"
