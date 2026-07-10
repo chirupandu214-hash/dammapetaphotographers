@@ -14,4 +14,14 @@ sans-serif;
 
 background:#f5f7fb;
 
+}@media print {
+
+button {
+display:none;
+}
+
+body {
+background:white;
+}
+
 }
