@@ -65,15 +65,17 @@ export default function MemberForm({ onSaved }: Props) {
   }, []);
 
   function updateField(
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) {
-    const { name, value } = e.target;
+  e: React.ChangeEvent<
+    HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+  >
+) {
+  const { name, value } = e.target;
 
-    setForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  }
+  setForm((prev) => ({
+    ...prev,
+    [name]: value,
+  }));
+}
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
