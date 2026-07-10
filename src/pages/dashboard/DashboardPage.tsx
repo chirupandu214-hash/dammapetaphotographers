@@ -139,6 +139,65 @@ stats.admins
 
 
 </div>
+  <div
+className="
+grid
+grid-cols-1
+lg:grid-cols-3
+gap-5
+mt-8
+"
+>
+
+
+<div className="bg-white p-5 rounded-xl shadow">
+
+<h2>
+Members Growth
+</h2>
+
+<MemberChart
+data={memberData}
+/>
+
+</div>
+
+
+
+<div className="bg-white p-5 rounded-xl shadow">
+
+<h2>
+Fund Collection
+</h2>
+
+<FundChart
+data={fundData}
+/>
+
+</div>
+
+
+
+<div className="bg-white p-5 rounded-xl shadow">
+
+<h2>
+Finance
+</h2>
+
+
+<FinanceChart
+
+income={70000}
+
+expense={25000}
+
+/>
+
+
+</div>
+
+
+</div>
 
 }
 
