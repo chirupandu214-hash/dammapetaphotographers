@@ -1,43 +1,19 @@
-function App() {
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import LoginPage from "@/pages/auth/LoginPage";
+import DashboardPage from "@/pages/dashboard/DashboardPage";
+import MyProfilePage from "@/pages/members/MyProfilePage";
+import QRVerificationPage from "@/pages/qr/QRVerificationPage";
+
+export default function App() {
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        background: "#f5f5f5",
-        fontFamily: "Arial",
-      }}
-    >
-      <div
-        style={{
-          background: "#fff",
-          padding: "40px",
-          borderRadius: "10px",
-          boxShadow: "0 0 10px rgba(0,0,0,0.15)",
-          textAlign: "center",
-        }}
-      >
-        <h1>📸 Dammapeta Photographers Management Portal</h1>
-
-        <p>Welcome to the Association Portal</p>
-
-        <button
-          style={{
-            padding: "12px 25px",
-            background: "#2563eb",
-            color: "#fff",
-            border: "none",
-            borderRadius: "6px",
-            cursor: "pointer",
-          }}
-        >
-          Login
-        </button>
-      </div>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/profile" element={<MyProfilePage />} />
+        <Route path="/qr" element={<QRVerificationPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
-
-export default App;
