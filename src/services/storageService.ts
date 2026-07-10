@@ -2,44 +2,75 @@ import { supabase } from "@/lib/supabase";
 
 
 export async function uploadMemberPhoto(
-  file: File
-) {
+ file:File
+){
 
-  const fileExt =
-    file.name.split(".").pop();
+if(
+!file.type.startsWith("image/")
+){
 
+throw new Error(
+"Only image files allowed"
+);
 
-  const fileName =
-    `${Date.now()}.${fileExt}`;
-
-
-  const filePath =
-    `members/${fileName}`;
-
-
-  const { error } =
-    await supabase
-      .storage
-      .from("member-photos")
-      .upload(
-        filePath,
-        file
-      );
+}
 
 
-  if (error) {
-    throw error;
-  }
+
+if(
+file.size > 2 * 1024 * 1024
+){
+
+throw new Error(
+"Maximum 2MB allowed"
+);
+
+}
 
 
-  const { data } =
-    supabase
-      .storage
-      .from("member-photos")
-      .getPublicUrl(
-        filePath
-      );
+
+const extension =
+file.name.split(".").pop();
 
 
-  return data.publicUrl;
+
+const fileName =
+`members/${Date.now()}.${extension}`;
+
+
+
+const {error}=await supabase
+.storage
+.from("member-photos")
+.upload(
+fileName,
+file,
+{
+cacheControl:"3600",
+upsert:false
+}
+);
+
+
+
+if(error){
+
+throw error;
+
+}
+
+
+
+const {data}=supabase
+.storage
+.from("member-photos")
+.getPublicUrl(
+fileName
+);
+
+
+
+return data.publicUrl;
+
+
 }
