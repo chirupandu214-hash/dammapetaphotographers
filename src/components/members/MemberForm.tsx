@@ -38,7 +38,22 @@ export default function MemberForm({ onSaved }: Props) {
       [e.target.name]: e.target.value,
     });
   }
+useEffect(() => {
+  async function loadMemberId() {
+    try {
+      const id = await getNextMemberId();
 
+      setForm((prev) => ({
+        ...prev,
+        member_id: id,
+      }));
+    } catch (error) {
+      console.error("Failed to load Member ID:", error);
+    }
+  }
+
+  loadMemberId();
+}, []);
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
