@@ -32,10 +32,11 @@ interface MemberFormData {
   status: string;
 }
 
-export default function MemberForm({ onSaved }: Props) {
-  const [loading, setLoading] = useState(false);
-
-  const [form, setForm] = useState<MemberFormData>({
+export default function MemberForm({
+  onSaved,
+  editMode = false,
+  initialData,
+}: Props)({
     member_id: "",
     full_name: "",
     father_name: "",
