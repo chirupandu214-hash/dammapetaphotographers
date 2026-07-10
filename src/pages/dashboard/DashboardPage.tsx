@@ -1,3 +1,13 @@
+import MemberChart
+from "@/components/charts/MemberChart";
+
+
+import FundChart
+from "@/components/charts/FundChart";
+
+
+import FinanceChart
+from "@/components/charts/FinanceChart";
 import {
 useEffect,
 useState
