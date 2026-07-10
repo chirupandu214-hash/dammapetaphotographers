@@ -1,72 +1,133 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { login } from "@/lib/auth";
+import {
+useState
+}
+from "react";
 
-export default function LoginPage() {
-  const navigate = useNavigate();
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+import {
+loginUser
+}
+from "@/services/authService";
 
-  function handleLogin() {
-    if (login(username, password)) {
-      navigate("/dashboard");
-    } else {
-      alert("Invalid Username or Password");
-    }
-  }
 
-  return (
-    <div
-      style={{
-        display: "grid",
-        placeItems: "center",
-        height: "100vh",
-      }}
-    >
-      <div
-        style={{
-          width: 320,
-          padding: 30,
-          background: "#fff",
-          borderRadius: 8,
-          boxShadow: "0 2px 8px rgba(0,0,0,.15)",
-        }}
-      >
-        <h2>Admin Login</h2>
+import {
+useAuth
+}
+from "@/context/AuthContext";
 
-        <input
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          style={{ width: "100%", marginTop: 15 }}
-        />
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          style={{ width: "100%", marginTop: 15 }}
-        />
+import {
+useNavigate
+}
+from "react-router-dom";
 
-        <button
-          onClick={handleLogin}
-          style={{
-            width: "100%",
-            marginTop: 20,
-            padding: 12,
-          }}
-        >
-          Login
-        </button>
 
-        <p style={{ marginTop: 20 }}>
-          Default Login:<br />
-          <strong>admin</strong><br />
-          <strong>admin123</strong>
-        </p>
-      </div>
-    </div>
-  );
+
+export default function LoginPage(){
+
+
+const [mobile,setMobile]=
+useState("");
+
+const [password,setPassword]=
+useState("");
+
+
+const {
+login
+}=useAuth();
+
+
+const navigate=
+useNavigate();
+
+
+
+async function submit(){
+
+
+try{
+
+
+const user=
+await loginUser(
+mobile,
+password
+);
+
+
+login(user);
+
+
+navigate(
+"/dashboard"
+);
+
+
+}
+catch{
+
+alert(
+"Invalid Login"
+);
+
+}
+
+
+
+}
+
+
+
+return(
+
+<div>
+
+
+<h1>
+DPA Login
+</h1>
+
+
+<input
+
+placeholder="Mobile"
+
+onChange={
+e=>setMobile(
+e.target.value
+)
+}
+
+/>
+
+
+<input
+
+type="password"
+
+placeholder="Password"
+
+onChange={
+e=>setPassword(
+e.target.value
+)
+}
+
+/>
+
+
+<button
+onClick={submit}
+>
+Login
+</button>
+
+
+
+</div>
+
+);
+
+
 }
