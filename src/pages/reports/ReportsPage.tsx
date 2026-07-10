@@ -1,7 +1,7 @@
-export default function ReportsPage() {
+export function ReportsPage() {
   return (
     <div>
-      <h1>Reports Page</h1>
+      <h1>Reports</h1>
     </div>
   );
 }
