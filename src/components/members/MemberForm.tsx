@@ -1,3 +1,38 @@
+interface MemberFormData {
+
+  id?: number;
+
+  member_id: string;
+
+  full_name: string;
+
+  father_name: string;
+
+  mobile: string;
+
+  aadhaar: string;
+
+  email: string;
+
+  gender: string;
+
+  dob: string;
+
+  blood_group: string;
+
+  studio_name: string;
+
+  address: string;
+
+  join_date: string;
+
+  photo: string;
+
+  role: string;
+
+  status: string;
+
+}
 async function handleSubmit(
   e: React.FormEvent<HTMLFormElement>
 ) {
