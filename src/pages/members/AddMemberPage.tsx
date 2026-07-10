@@ -7,8 +7,8 @@ export default function AddMemberPage() {
   const navigate = useNavigate();
 
   function handleSaved() {
-    navigate("/members");
-  }
+  navigate("/members", { replace: true });
+}
 
   return (
     <AppLayout>
