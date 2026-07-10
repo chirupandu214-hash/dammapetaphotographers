@@ -22,7 +22,14 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       />
-
+<Route
+  path="/members/edit/:id"
+  element={
+    <ProtectedRoute>
+      <EditMemberPage />
+    </ProtectedRoute>
+  }
+/>
       <Route
         path="/members"
         element={
