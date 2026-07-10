@@ -6,18 +6,48 @@ import MembersPage from "@/pages/members/MembersPage";
 import ReportsPage from "@/pages/reports/ReportsPage";
 import SettingsPage from "@/pages/settings/SettingsPage";
 
+import ProtectedRoute from "@/components/ProtectedRoute";
+
 export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<LoginPage />} />
 
-      <Route path="/dashboard" element={<DashboardPage />} />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        }
+      />
 
-      <Route path="/members" element={<MembersPage />} />
+      <Route
+        path="/members"
+        element={
+          <ProtectedRoute>
+            <MembersPage />
+          </ProtectedRoute>
+        }
+      />
 
-      <Route path="/reports" element={<ReportsPage />} />
+      <Route
+        path="/reports"
+        element={
+          <ProtectedRoute>
+            <ReportsPage />
+          </ProtectedRoute>
+        }
+      />
 
-      <Route path="/settings" element={<SettingsPage />} />
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <SettingsPage />
+          </ProtectedRoute>
+        }
+      />
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
