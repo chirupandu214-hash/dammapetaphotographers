@@ -1,3 +1,4 @@
+import BankTransactionsPage from "@/pages/bank/BankTransactionsPage";
 import FundPage from "@/pages/fund/FundPage";
 import MemberProfilePage from "@/pages/members/MemberProfilePage";
 import QRVerificationPage from "@/pages/qr/QRVerificationPage";
@@ -49,6 +50,21 @@ element={
 <ProtectedRoute>
 
 <FundPage/>
+
+</ProtectedRoute>
+
+}
+
+/>
+      <Route
+
+path="/bank"
+
+element={
+
+<ProtectedRoute>
+
+<BankTransactionsPage/>
 
 </ProtectedRoute>
 
