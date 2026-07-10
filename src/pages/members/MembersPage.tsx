@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 import AppLayout from "@/layouts/AppLayout";
@@ -8,13 +8,14 @@ import { getMembers } from "@/services/memberService";
 export default function MembersPage() {
   const [members, setMembers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
 
   async function loadMembers() {
     try {
       const data = await getMembers();
       setMembers(data || []);
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error(error);
       alert("Failed to load members");
     } finally {
       setLoading(false);
@@ -25,36 +26,52 @@ export default function MembersPage() {
     loadMembers();
   }, []);
 
+  const filteredMembers = useMemo(() => {
+    const keyword = search.toLowerCase();
+
+    return members.filter((member) => {
+      return (
+        member.member_id?.toLowerCase().includes(keyword) ||
+        member.full_name?.toLowerCase().includes(keyword) ||
+        member.mobile?.includes(keyword) ||
+        member.studio_name?.toLowerCase().includes(keyword)
+      );
+    });
+  }, [members, search]);
+
   return (
     <AppLayout>
       <div
         style={{
           display: "flex",
           justifyContent: "space-between",
-          marginBottom: "20px",
+          alignItems: "center",
+          marginBottom: 20,
         }}
       >
         <h1>Members</h1>
 
         <Link to="/members/add">
-          <button
-            style={{
-              padding: "10px 18px",
-              background: "#1976d2",
-              color: "#fff",
-              border: "none",
-              borderRadius: "6px",
-            }}
-          >
-            + Add Member
-          </button>
+          <button>+ Add Member</button>
         </Link>
       </div>
+
+      <input
+        type="text"
+        placeholder="Search by Member ID, Name, Mobile, Studio..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        style={{
+          width: "100%",
+          padding: 10,
+          marginBottom: 20,
+        }}
+      />
 
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <MemberTable members={members} />
+        <MemberTable members={filteredMembers} />
       )}
     </AppLayout>
   );
