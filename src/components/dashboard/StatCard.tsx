@@ -1,36 +1,31 @@
-interface Props{
-
- title:string;
-
- value:number;
-
-}
-
-
 export default function StatCard({
- title,
- value
+title,
+value
 }:Props){
 
 return(
 
 <div
-
-style={{
-padding:"20px",
-background:"#fff",
-borderRadius:"10px",
-boxShadow:"0 3px 10px #ddd"
-}}
-
+className="
+bg-white
+rounded-xl
+shadow
+p-5
+"
 >
 
-<h3>
+<h3 className="text-gray-600">
 {title}
 </h3>
 
 
-<h1>
+<h1
+className="
+text-3xl
+font-bold
+mt-2
+"
+>
 {value}
 </h1>
 
