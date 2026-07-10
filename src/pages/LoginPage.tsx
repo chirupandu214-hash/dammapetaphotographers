@@ -1,105 +1,87 @@
-import React,
-{
-useState
-}
-from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/lib/supabase";
 
+export default function LoginPage() {
+  const navigate = useNavigate();
 
-import {
-supabase
-}
-from "@/lib/supabase";
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
+  async function login() {
+    setLoading(true);
+    setError("");
 
-import {
-useNavigate
-}
-from "react-router-dom";
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
+    setLoading(false);
 
+    if (error) {
+      setError(error.message);
+      return;
+    }
 
-export default function LoginPage(){
+    navigate("/dashboard", { replace: true });
+  }
 
+  return (
+    <div
+      style={{
+        maxWidth: 400,
+        margin: "80px auto",
+        padding: 24,
+        border: "1px solid #ddd",
+        borderRadius: 10,
+      }}
+    >
+      <h2>Dammapeta Photographers Portal</h2>
 
-const [email,setEmail]=useState("");
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        style={{
+          width: "100%",
+          padding: 10,
+          marginTop: 15,
+        }}
+      />
 
-const [password,setPassword]=useState("");
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        style={{
+          width: "100%",
+          padding: 10,
+          marginTop: 10,
+        }}
+      />
 
-const [error,setError]=useState("");
+      <button
+        onClick={login}
+        disabled={loading}
+        style={{
+          width: "100%",
+          padding: 10,
+          marginTop: 15,
+        }}
+      >
+        {loading ? "Logging in..." : "Login"}
+      </button>
 
-const navigate=useNavigate();
-
-
-
-async function login(){
-
-
-const {error}=await supabase.auth.signInWithPassword({
-
-email,
-password
-
-});
-
-
-if(error){
-
-setError(error.message);
-
-}
-else{
-
-navigate("/dashboard");
-
-}
-
-
-}
-
-
-
-return(
-
-<div className="login">
-
-
-<h1>
-Dammapeta Photographers Portal
-</h1>
-
-
-<input
-placeholder="Email"
-value={email}
-onChange={
-e=>setEmail(e.target.value)
-}
-/>
-
-
-<input
-type="password"
-placeholder="Password"
-value={password}
-onChange={
-e=>setPassword(e.target.value)
-}
-/>
-
-
-<button onClick={login}>
-Login
-</button>
-
-
-<p>
-{error}
-</p>
-
-
-</div>
-
-);
-
-
+      {error && (
+        <p style={{ color: "red", marginTop: 15 }}>
+          {error}
+        </p>
+      )}
+    </div>
+  );
 }
