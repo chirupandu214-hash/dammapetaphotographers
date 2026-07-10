@@ -51,6 +51,25 @@ export default function MemberTable({
             <td>{member.studio_name}</td>
             <td>{member.role}</td>
             <td>{member.status}</td>
+            <td>
+  <button
+    onClick={() => {
+      if (window.confirm("Delete this member?")) {
+        onDelete(member.id);
+      }
+    }}
+    style={{
+      background: "#d32f2f",
+      color: "#fff",
+      border: "none",
+      padding: "6px 10px",
+      borderRadius: "4px",
+      cursor: "pointer",
+    }}
+  >
+    Delete
+  </button>
+</td>
           </tr>
         ))}
       </tbody>
