@@ -78,7 +78,16 @@ export default function MembersPage() {
           <button>+ Add Member</button>
         </Link>
       </div>
+<button
 
+onClick={()=>exportExcel(
+ members,
+ "Members_List"
+)}
+
+>
+Export Excel
+</button>
       <input
         type="text"
         placeholder="Search by Member ID, Name, Mobile, Studio..."
