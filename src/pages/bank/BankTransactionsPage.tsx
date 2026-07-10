@@ -1,20 +1,7 @@
-import React from "react";
-
-
-export default function BankTransactionsPage(){
-
-return(
- <div style={{padding:40}}>
-
-  <h1>
-   Bank Transactions
-  </h1>
-
-  <p>
-   Transactions management
-  </p>
-
- </div>
-);
-
+export default function BankTransactionsPage() {
+  return (
+    <div style={{ padding: 20 }}>
+      <h1>Bank Transactions</h1>
+    </div>
+  );
 }
