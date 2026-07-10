@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Search, Plus, User, Trash2, X } from "lucide-react";
+import { Search, Plus, User, Trash2, X, Upload } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
 
@@ -9,6 +9,7 @@ interface Member {
   full_name: string;
   mobile: string;
   studio_name: string;
+  photo_url?: string;
   status: "Active" | "Pending";
 }
 
@@ -19,6 +20,7 @@ export default function MembersPage() {
   const [loading, setLoading] = useState(true);
 
   const [showForm, setShowForm] = useState(false);
+  const [photo, setPhoto] = useState<File | null>(null);
 
   const [formData, setFormData] = useState({
     full_name: "",
@@ -44,15 +46,15 @@ export default function MembersPage() {
       .from("members")
       .select("*")
       .order("created_at", {
-        ascending: false,
+        ascending: false
       });
 
 
-    if (error) {
+    if(error){
 
       toast.error(error.message);
 
-    } else {
+    }else{
 
       setMembers(data || []);
 
@@ -64,29 +66,68 @@ export default function MembersPage() {
 
 
 
-  function generateMemberId() {
+  function generateMemberId(){
 
     const year = new Date().getFullYear();
 
-    const random =
+    const number =
       Math.floor(
         1000 + Math.random() * 9000
       );
 
-    return `DPA-${year}-${random}`;
+    return `DPA-${year}-${number}`;
+
+  }
+
+
+
+  async function uploadPhoto(){
+
+    if(!photo)
+      return "";
+
+
+    const fileName =
+      `${Date.now()}-${photo.name}`;
+
+
+    const {error} =
+      await supabase.storage
+      .from("member-photos")
+      .upload(
+        fileName,
+        photo
+      );
+
+
+    if(error){
+
+      toast.error(error.message);
+      return "";
+
+    }
+
+
+    const {data} =
+      supabase.storage
+      .from("member-photos")
+      .getPublicUrl(fileName);
+
+
+    return data.publicUrl;
 
   }
 
 
 
 
-  async function addMember() {
 
+  async function addMember(){
 
-    if (
+    if(
       !formData.full_name ||
       !formData.mobile
-    ) {
+    ){
 
       toast.error(
         "Name and Mobile required"
@@ -97,56 +138,70 @@ export default function MembersPage() {
     }
 
 
-
-    const { error } = await supabase
-      .from("members")
-      .insert({
-
-        member_id: generateMemberId(),
-
-        full_name: formData.full_name,
-
-        father_name: formData.father_name,
-
-        mobile: formData.mobile,
-
-        aadhaar: formData.aadhaar,
-
-        studio_name: formData.studio_name,
-
-        address: formData.address,
-
-        status: "Active",
-
-      });
+    const photoUrl =
+      await uploadPhoto();
 
 
 
-    if (error) {
+    const {error}=await supabase
+    .from("members")
+    .insert({
+
+      member_id:
+      generateMemberId(),
+
+      full_name:
+      formData.full_name,
+
+      father_name:
+      formData.father_name,
+
+      mobile:
+      formData.mobile,
+
+      aadhaar:
+      formData.aadhaar,
+
+      studio_name:
+      formData.studio_name,
+
+      address:
+      formData.address,
+
+      photo_url:
+      photoUrl,
+
+      status:
+      "Active"
+
+    });
+
+
+
+    if(error){
 
       toast.error(error.message);
 
-    } else {
+    }else{
 
       toast.success(
         "Member Added Successfully"
       );
 
-
       setShowForm(false);
 
+      setPhoto(null);
 
       setFormData({
 
-        full_name: "",
-        father_name: "",
-        mobile: "",
-        aadhaar: "",
-        studio_name: "",
-        address: "",
+        full_name:"",
+        father_name:"",
+        mobile:"",
+        aadhaar:"",
+        studio_name:"",
+        address:""
 
       });
-
 
       loadMembers();
 
@@ -157,24 +212,17 @@ export default function MembersPage() {
 
 
 
+
   async function deleteMember(id:string){
 
-    const confirmDelete =
-      confirm(
-        "Delete this member?"
-      );
-
-
-    if(!confirmDelete)
+    if(!confirm("Delete Member?"))
       return;
 
 
-
     const {error}=await supabase
-      .from("members")
-      .delete()
-      .eq("id",id);
-
+    .from("members")
+    .delete()
+    .eq("id",id);
 
 
     if(error){
@@ -223,12 +271,11 @@ export default function MembersPage() {
 
 
 
-  return (
+
+return (
 
 <div className="p-6 space-y-6">
 
-
-{/* Header */}
 
 <div className="flex justify-between items-center">
 
@@ -236,29 +283,27 @@ export default function MembersPage() {
 <div>
 
 <h1 className="text-3xl font-bold">
-Member Management
+Members
 </h1>
 
 <p className="text-gray-500">
-Manage Association Members
+Dammapeta Photographers Association
 </p>
 
 </div>
 
 
-
 <button
 
-onClick={() =>
-setShowForm(true)
-}
+onClick={()=>setShowForm(true)}
 
 className="
-flex items-center gap-2
 bg-blue-600
 text-white
 px-4 py-2
 rounded-lg
+flex gap-2
+items-center
 ">
 
 <Plus size={18}/>
@@ -274,35 +319,31 @@ Add Member
 
 
 
-{/* Search */}
-
 <div className="relative">
 
 
 <Search
-className="
-absolute left-3 top-3 text-gray-400
-"
+className="absolute left-3 top-3 text-gray-400"
 size={18}
 />
 
 
 <input
 
-value={search}
-
-onChange={(e)=>
-setSearch(e.target.value)
-}
+className="
+w-full border rounded-lg
+py-3 pl-10
+"
 
 placeholder="
 Search Name / Member ID / Mobile
 "
 
-className="
-w-full border rounded-lg
-py-3 pl-10
-"
+value={search}
+
+onChange={(e)=>
+setSearch(e.target.value)
+}
 
 />
 
@@ -313,10 +354,8 @@ py-3 pl-10
 
 
 
-{/* Table */}
-
 <div className="
-bg-white rounded-xl shadow overflow-hidden
+bg-white shadow rounded-xl overflow-hidden
 ">
 
 
@@ -327,24 +366,24 @@ bg-white rounded-xl shadow overflow-hidden
 
 <tr>
 
-<th className="p-4 text-left">
+<th className="p-4">
+Photo
+</th>
+
+<th className="p-4">
 Member ID
 </th>
 
-<th className="p-4 text-left">
+<th className="p-4">
 Name
 </th>
 
-<th className="p-4 text-left">
+<th className="p-4">
 Mobile
 </th>
 
-<th className="p-4 text-left">
+<th className="p-4">
 Studio
-</th>
-
-<th className="p-4 text-left">
-Status
 </th>
 
 <th className="p-4">
@@ -361,52 +400,46 @@ Action
 
 
 {
-loading ? (
+loading ?
 
 <tr>
 <td
 colSpan={6}
-className="text-center py-10"
+className="text-center p-10"
 >
 Loading...
 </td>
 </tr>
 
-)
 
 :
 
 filteredMembers.length===0 ?
 
 
-(
-
 <tr>
 
 <td
 colSpan={6}
-className="
-text-center py-10 text-gray-500
-">
+className="text-center p-10 text-gray-500"
+>
 
 <User
-className="mx-auto mb-2"
+className="mx-auto"
 size={40}
 />
 
-No Members Found
+No Members
 
 </td>
 
 </tr>
 
 
-)
-
 :
 
 
-filteredMembers.map((member)=>(
+filteredMembers.map(member=>(
 
 
 <tr
@@ -416,59 +449,50 @@ className="border-t"
 
 
 <td className="p-4">
-{member.member_id}
-</td>
 
+{
 
-<td className="p-4">
-{member.full_name}
-</td>
+member.photo_url ?
 
+<img
+src={member.photo_url}
+className="
+w-12 h-12 rounded-full object-cover
+"
+/>
 
-<td className="p-4">
-{member.mobile}
-</td>
+:
 
+<User/>
 
-<td className="p-4">
-{member.studio_name}
-</td>
-
-
-<td className="p-4">
-
-<span className="
-bg-green-100
-text-green-700
-px-3 py-1 rounded-full
-">
-
-{member.status}
-
-</span>
+}
 
 </td>
 
 
-<td className="p-4 text-center">
+<td>{member.member_id}</td>
+
+<td>{member.full_name}</td>
+
+<td>{member.mobile}</td>
+
+<td>{member.studio_name}</td>
+
+
+<td>
 
 <button
 
-onClick={() =>
+onClick={()=>
 deleteMember(member.id)
 }
 
-className="
-text-red-600
-flex items-center gap-1 mx-auto
-">
+className="text-red-600"
+>
 
-<Trash2 size={16}/>
-
-Delete
+<Trash2 size={18}/>
 
 </button>
-
 
 </td>
 
@@ -494,43 +518,34 @@ Delete
 
 
 
-{/* Add Member Modal */}
-
-
 {
-showForm && (
-
+showForm &&
 
 <div className="
 fixed inset-0
 bg-black/50
 flex items-center justify-center
-z-50
 ">
 
 
 <div className="
 bg-white
-w-full max-w-lg
+p-6
 rounded-xl
-p-6 space-y-4
+w-full max-w-lg
+space-y-3
 ">
 
 
-<div className="
-flex justify-between
-">
-
+<div className="flex justify-between">
 
 <h2 className="text-xl font-bold">
-Add New Member
+Add Member
 </h2>
 
 
 <button
-onClick={() =>
-setShowForm(false)
-}
+onClick={()=>setShowForm(false)}
 >
 
 <X/>
@@ -543,10 +558,8 @@ setShowForm(false)
 
 
 <input
-className="w-full border p-3 rounded-lg"
+className="input"
 placeholder="Full Name"
-
-value={formData.full_name}
 
 onChange={(e)=>
 setFormData({
@@ -554,15 +567,13 @@ setFormData({
 full_name:e.target.value
 })
 }
+
 />
 
 
-
 <input
-className="w-full border p-3 rounded-lg"
+className="input"
 placeholder="Father Name"
-
-value={formData.father_name}
 
 onChange={(e)=>
 setFormData({
@@ -570,15 +581,13 @@ setFormData({
 father_name:e.target.value
 })
 }
+
 />
 
 
-
 <input
-className="w-full border p-3 rounded-lg"
+className="input"
 placeholder="Mobile"
-
-value={formData.mobile}
 
 onChange={(e)=>
 setFormData({
@@ -586,15 +595,13 @@ setFormData({
 mobile:e.target.value
 })
 }
+
 />
 
 
-
 <input
-className="w-full border p-3 rounded-lg"
+className="input"
 placeholder="Aadhaar"
-
-value={formData.aadhaar}
 
 onChange={(e)=>
 setFormData({
@@ -602,15 +609,13 @@ setFormData({
 aadhaar:e.target.value
 })
 }
+
 />
 
 
-
 <input
-className="w-full border p-3 rounded-lg"
+className="input"
 placeholder="Studio Name"
-
-value={formData.studio_name}
 
 onChange={(e)=>
 setFormData({
@@ -618,17 +623,15 @@ setFormData({
 studio_name:e.target.value
 })
 }
-/>
 
+/>
 
 
 <textarea
 
-className="w-full border p-3 rounded-lg"
+className="input"
 
 placeholder="Address"
-
-value={formData.address}
 
 onChange={(e)=>
 setFormData({
@@ -638,6 +641,31 @@ address:e.target.value
 }
 
 />
+
+
+
+<div>
+
+<label>
+Photo Upload
+</label>
+
+<input
+
+type="file"
+
+accept="image/*"
+
+onChange={(e)=>
+setPhoto(
+e.target.files?.[0] || null
+)
+}
+
+/>
+
+</div>
+
 
 
 
@@ -651,27 +679,28 @@ text-white
 w-full
 py-3
 rounded-lg
+flex
+justify-center
+gap-2
 ">
+
+<Upload size={18}/>
 
 Save Member
 
 </button>
 
 
-
 </div>
 
 
 </div>
-
-
-)
 
 }
 
 
 </div>
 
-  );
+);
 
 }
