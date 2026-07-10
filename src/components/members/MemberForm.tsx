@@ -22,6 +22,21 @@ interface MemberFormData {
   dob: string;
 
   blood_group: string;
+  <div>
+
+<label>
+ Member Photo
+</label>
+
+<br/>
+
+<input
+ type="file"
+ accept="image/*"
+ onChange={handlePhoto}
+/>
+
+</div>
 
   studio_name: string;
 
