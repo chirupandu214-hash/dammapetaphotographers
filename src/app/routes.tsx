@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "@/pages/auth/LoginPage";
 import DashboardPage from "@/pages/dashboard/DashboardPage";
 import MembersPage from "@/pages/members/MembersPage";
+import AddMemberPage from "@/pages/members/AddMemberPage";
 import ReportsPage from "@/pages/reports/ReportsPage";
 import SettingsPage from "@/pages/settings/SettingsPage";
 
@@ -27,6 +28,15 @@ export default function AppRoutes() {
         element={
           <ProtectedRoute>
             <MembersPage />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/members/add"
+        element={
+          <ProtectedRoute>
+            <AddMemberPage />
           </ProtectedRoute>
         }
       />
