@@ -54,36 +54,44 @@ export default function MemberForm({
     status: "Active",
   });
 
-  useEffect(() => {
-    async function loadMemberId() {
-      try {
-        const id = await getNextMemberId();
+ useEffect(() => {
+  async function initializeForm() {
+    try {
+      if (editMode && initialData) {
+        setForm({
+          member_id: initialData.member_id ?? "",
+          full_name: initialData.full_name ?? "",
+          father_name: initialData.father_name ?? "",
+          mobile: initialData.mobile ?? "",
+          aadhaar: initialData.aadhaar ?? "",
+          email: initialData.email ?? "",
+          gender: initialData.gender ?? "Male",
+          dob: initialData.dob ?? "",
+          blood_group: initialData.blood_group ?? "",
+          studio_name: initialData.studio_name ?? "",
+          address: initialData.address ?? "",
+          join_date: initialData.join_date ?? "",
+          photo: initialData.photo ?? "",
+          role: initialData.role ?? "Member",
+          status: initialData.status ?? "Active",
+        });
 
-        setForm((prev) => ({
-          ...prev,
-          member_id: id,
-        }));
-      } catch (error) {
-        console.error("Failed to load Member ID:", error);
+        return;
       }
+
+      const nextId = await getNextMemberId();
+
+      setForm((prev) => ({
+        ...prev,
+        member_id: nextId,
+      }));
+    } catch (error) {
+      console.error(error);
     }
+  }
 
-    loadMemberId();
-  }, []);
-
-  function updateField(
-  e: React.ChangeEvent<
-    HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-  >
-) {
-  const { name, value } = e.target;
-
-  setForm((prev) => ({
-    ...prev,
-    [name]: value,
-  }));
-}
-
+  initializeForm();
+}, [editMode, initialData]);
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
