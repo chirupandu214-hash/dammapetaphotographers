@@ -1,15 +1,7 @@
-import React from "react";
-
-const QRVerificationPage = () => {
-
+export default function QRVerificationPage() {
   return (
-    <div style={{padding:"30px"}}>
+    <div style={{ padding: 20 }}>
       <h1>QR Verification</h1>
-      <p>Member QR Code Verification Page</p>
     </div>
   );
-
-};
-
-
-export default QRVerificationPage;
+}
