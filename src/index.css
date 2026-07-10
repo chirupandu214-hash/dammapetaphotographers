@@ -25,3 +25,22 @@ background:white;
 }
 
 }
+@media print {
+
+button {
+display:none;
+}
+
+
+aside,
+nav {
+display:none;
+}
+
+
+body {
+background:white;
+}
+
+}
+
