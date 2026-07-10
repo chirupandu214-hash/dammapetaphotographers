@@ -79,7 +79,21 @@ async function handleSubmit(
         form
       );
 
+function handlePhoto(
+  e: React.ChangeEvent<HTMLInputElement>
+){
 
+  const file =
+    e.target.files?.[0];
+
+
+  if(file){
+
+    setPhotoFile(file);
+
+  }
+
+}
       alert(
         "Member updated successfully."
       );
