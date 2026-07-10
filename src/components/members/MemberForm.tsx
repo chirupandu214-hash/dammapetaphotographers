@@ -111,10 +111,9 @@ async function handleSubmit(
     if (editMode && initialData) {
 
       await updateMember(
-        Number(initialData.id),
-        form
-      );
-
+ Number(initialData.id),
+ finalData
+);
 function handlePhoto(
   e: React.ChangeEvent<HTMLInputElement>
 ){
