@@ -1,299 +1,98 @@
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import React from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-
-import { AppLayout } from "@/components/layout/AppLayout";
-
-
-// Pages
-
-import DashboardPage from "@/pages/dashboard/DashboardPage";
-
-import MembersPage from "@/pages/members/MembersPage";
+import LoginPage from "@/pages/LoginPage";
+import DashboardPage from "@/pages/DashboardPage";
 
 import MemberProfilePage from "@/pages/members/MemberProfilePage";
-
-import PaymentsPage from "@/pages/payments/PaymentsPage";
-
 import BankTransactionsPage from "@/pages/bank/BankTransactionsPage";
-
 import QRVerificationPage from "@/pages/qr/QRVerificationPage";
 
-import IDCardsPage from "@/pages/idcards/IDCardsPage";
 
-import ReportsPage from "@/pages/reports/ReportsPage";
+function ProtectedRoute({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
 
-import EventsPage from "@/pages/events/EventsPage";
+  const user = localStorage.getItem("user");
 
-import NotificationsPage from "@/pages/notifications/NotificationsPage";
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
 
-import DocumentsPage from "@/pages/documents/DocumentsPage";
-
-import UsersPage from "@/pages/users/UsersPage";
-
-import SettingsPage from "@/pages/settings/SettingsPage";
-
-
-
-// Authentication Pages
-
-import LoginPage from "@/pages/auth/LoginPage";
-
-import ForgotPasswordPage from "@/pages/auth/ForgotPasswordPage";
-
-import ChangePasswordPage from "@/pages/auth/ChangePasswordPage";
-
-
-
-
-export default function App(){
-
-
-return (
-
-
-<BrowserRouter>
-
-
-<Routes>
-
-
-
-{/* Public Routes */}
-
-
-<Route
-
-path="/login"
-
-element={<LoginPage />}
-
-/>
-
-
-
-<Route
-
-path="/forgot-password"
-
-element={<ForgotPasswordPage />}
-
-/>
-
-
-
-<Route
-
-path="/change-password"
-
-element={<ChangePasswordPage />}
-
-/>
-
-
-
-
-
-{/* Protected Application */}
-
-
-<Route
-
-element={<AppLayout />}
-
->
-
-
-
-<Route
-
-path="/"
-
-element={
-<Navigate
-to="/dashboard"
-replace
-/>
+  return children;
 }
 
-/>
 
-
-
-
-<Route
-
-path="/dashboard"
-
-element={<DashboardPage />}
-
-/>
-
-
-
-
-<Route
-
-path="/members"
-
-element={<MembersPage />}
-
-/>
-
-
-
-<Route
-
-path="/members/:id"
-
-element={<MemberProfilePage />}
-
-/>
-
-
-
-
-<Route
-
-path="/payments"
-
-element={<PaymentsPage />}
-
-/>
-
-
-
-
-<Route
-
-path="/bank"
-
-element={<BankTransactionsPage />}
-
-/>
-
-
-
-
-<Route
-
-path="/qr"
-
-element={<QRVerificationPage />}
-
-/>
-
-
-
-
-<Route
-
-path="/idcards"
-
-element={<IDCardsPage />}
-
-/>
-
-
-
-
-<Route
-
-path="/reports"
-
-element={<ReportsPage />}
-
-/>
-
-
-
-
-<Route
-
-path="/events"
-
-element={<EventsPage />}
-
-/>
-
-
-
-
-<Route
-
-path="/notifications"
-
-element={<NotificationsPage />}
-
-/>
-
-
-
-
-<Route
-
-path="/documents"
-
-element={<DocumentsPage />}
-
-/>
-
-
-
-
-<Route
-
-path="/users"
-
-element={<UsersPage />}
-
-/>
-
-
-
-
-<Route
-
-path="/settings"
-
-element={<SettingsPage />}
-
-/>
-
-
-
-</Route>
-
-
-
-
-{/* 404 */}
-
-<Route
-
-path="*"
-
-element={
-<Navigate
-to="/dashboard"
-replace
-/>
-}
-
-/>
-
-
-
-</Routes>
-
-
-</BrowserRouter>
-
-
-);
-
+export default function App() {
+
+  return (
+    <BrowserRouter>
+
+      <Routes>
+
+        {/* Login */}
+        <Route
+          path="/login"
+          element={<LoginPage />}
+        />
+
+
+        {/* Dashboard */}
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute>
+          }
+        />
+
+
+        {/* Members */}
+        <Route
+          path="/members/profile"
+          element={
+            <ProtectedRoute>
+              <MemberProfilePage />
+            </ProtectedRoute>
+          }
+        />
+
+
+        {/* Bank */}
+        <Route
+          path="/bank/transactions"
+          element={
+            <ProtectedRoute>
+              <BankTransactionsPage />
+            </ProtectedRoute>
+          }
+        />
+
+
+        {/* QR Verification */}
+        <Route
+          path="/qr-verification"
+          element={
+            <ProtectedRoute>
+              <QRVerificationPage />
+            </ProtectedRoute>
+          }
+        />
+
+
+        {/* Wrong URL */}
+        <Route
+          path="*"
+          element={
+            <Navigate to="/" replace />
+          }
+        />
+
+      </Routes>
+
+    </BrowserRouter>
+  );
 }
