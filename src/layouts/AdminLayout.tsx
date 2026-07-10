@@ -1,3 +1,15 @@
+import {
+useAuth
+}
+from "@/context/AuthContext";const {user}=useAuth();{
+user?.role==="Admin" && (
+
+<Link to="/reports">
+Reports
+</Link>
+
+)
+}
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
