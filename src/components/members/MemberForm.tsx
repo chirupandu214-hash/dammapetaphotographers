@@ -1,3 +1,6 @@
+import {
+  uploadMemberPhoto
+} from "@/services/storageService";
 interface MemberFormData {
 
   id?: number;
