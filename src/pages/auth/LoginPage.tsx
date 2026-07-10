@@ -1,109 +1,97 @@
 import { useState } from "react";
-import { Camera, Eye, EyeOff } from "lucide-react";
-import { Navigate, useNavigate } from "react-router-dom";
-import { toast } from "sonner";
-import { useAuth } from "@/hooks/useAuth";
-import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
-import { Input } from "@/components/ui/Input";
+import { useNavigate } from "react-router-dom";
 
-export function LoginPage() {
-  const { session, profile, signIn } = useAuth();
+export default function LoginPage() {
   const navigate = useNavigate();
 
-  const [identifier, setIdentifier] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [remember, setRemember] = useState(true);
-  const [loading, setLoading] = useState(false);
+  const [role, setRole] = useState("member");
 
-  if (session && !profile?.must_change_password) {
-    return <Navigate to="/" replace />;
-  }
-
-  async function submit(e: React.FormEvent) {
-    e.preventDefault();
-
-    try {
-      setLoading(true);
-
-      localStorage.setItem("remember_me", remember ? "true" : "false");
-
-      await signIn(identifier, password);
-
-      toast.success("Login successful.");
-
-      navigate("/");
-    } catch (error: any) {
-      toast.error(error.message || "Login failed.");
-    } finally {
-      setLoading(false);
+  const login = () => {
+    // Demo Login
+    if (
+      role === "admin" &&
+      username === "admin" &&
+      password === "admin123"
+    ) {
+      navigate("/admin/dashboard");
+      return;
     }
-  }
+
+    if (
+      role === "member" &&
+      username === "member" &&
+      password === "123456"
+    ) {
+      navigate("/member/dashboard");
+      return;
+    }
+
+    alert("Invalid Username or Password");
+  };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 p-4">
-      <Card className="w-full max-w-md border-white/10 bg-white/10 p-8 text-white shadow-2xl backdrop-blur-xl">
-        <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-3xl bg-white/15">
-            <Camera className="h-8 w-8" />
-          </div>
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background: "#f3f4f6",
+      }}
+    >
+      <div
+        style={{
+          width: 380,
+          background: "#fff",
+          padding: 30,
+          borderRadius: 10,
+          boxShadow: "0 0 10px #ccc",
+        }}
+      >
+        <h2 align="center">📸 Dammapeta Photographers Portal</h2>
 
-          <h1 className="text-2xl font-bold">
-            Dhammapeta Photographers Association
-          </h1>
+        <input
+          placeholder="Username"
+          style={{ width: "100%", padding: 10, marginTop: 20 }}
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
 
-          <p className="mt-1 text-sm text-white/70">
-            Management Portal
-          </p>
-        </div>
+        <input
+          type="password"
+          placeholder="Password"
+          style={{ width: "100%", padding: 10, marginTop: 10 }}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-        <form onSubmit={submit} className="space-y-4">
-          <Input
-            placeholder="Email or registered mobile number"
-            value={identifier}
-            onChange={(e) => setIdentifier(e.target.value)}
-            required
-          />
+        <select
+          style={{ width: "100%", padding: 10, marginTop: 10 }}
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+        >
+          <option value="member">Member</option>
+          <option value="admin">Admin</option>
+        </select>
 
-          <div className="relative">
-            <Input
-              type={showPassword ? "text" : "password"}
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-
-            <button
-              type="button"
-              className="absolute right-3 top-2.5 text-slate-500"
-              onClick={() => setShowPassword((v) => !v)}
-            >
-              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-            </button>
-          </div>
-
-          <div className="flex items-center justify-between text-sm">
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={remember}
-                onChange={(e) => setRemember(e.target.checked)}
-              />
-              Remember me
-            </label>
-
-            <a href="/forgot-password" className="text-blue-200 hover:underline">
-              Forgot password?
-            </a>
-          </div>
-
-          <Button className="w-full" disabled={loading}>
-            {loading ? "Signing in..." : "Login"}
-          </Button>
-        </form>
-      </Card>
-    </main>
+        <button
+          onClick={login}
+          style={{
+            width: "100%",
+            padding: 12,
+            marginTop: 20,
+            background: "#2563eb",
+            color: "#fff",
+            border: "none",
+            cursor: "pointer",
+            borderRadius: 6,
+          }}
+        >
+          Login
+        </button>
+      </div>
+    </div>
   );
 }
