@@ -1,3 +1,26 @@
+export async function getMemberById(id: number) {
+  const { data, error } = await supabase
+    .from("members")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error) throw error;
+
+  return data;
+}
+
+export async function updateMember(
+  id: number,
+  member: Record<string, unknown>
+) {
+  const { error } = await supabase
+    .from("members")
+    .update(member)
+    .eq("id", id);
+
+  if (error) throw error;
+}
 import { supabase } from "@/lib/supabase";
 export async function deleteMember(id: number) {
   const { error } = await supabase
