@@ -1,4 +1,8 @@
 import {
+exportPDF
+}
+from "@/services/exportService";
+import {
 useEffect,
 useState
 }
@@ -32,7 +36,42 @@ useState<any[]>([]);
 const [banks,setBanks]=
 useState<any[]>([]);
 
+function downloadReportPDF(){
 
+const rows =
+funds.map(
+(item)=>[
+
+item.receipt_no,
+
+item.member_name,
+
+item.amount,
+
+item.year
+
+]
+);
+
+
+exportPDF(
+
+"Fund Collection Report",
+
+[
+"Receipt",
+"Member",
+"Amount",
+"Year"
+],
+
+rows,
+
+"Fund_Report"
+
+);
+
+}
 
 useEffect(()=>{
 
