@@ -1,51 +1,101 @@
-export interface ResourceField {
-  name: string;
-  label: string;
-  type: string;
-  required?: boolean;
-  readonly?: boolean;
-  options?: string[];
-}
+// src/config/resources.ts
+
+import {
+  LayoutDashboard,
+  Users,
+  CreditCard,
+  Building2,
+  QrCode,
+  IdCard,
+  BarChart3,
+  CalendarDays,
+  Bell,
+  Settings,
+  ShieldCheck,
+  FileText,
+} from "lucide-react";
 
 export interface ResourceConfig {
-  table: string;
-  title: string;
-  description?: string;
+  name: string;
+  label: string;
   path: string;
+  icon: any;
   adminOnly?: boolean;
-  searchable?: string[];
-  fields?: ResourceField[];
 }
 
 export const adminResources: ResourceConfig[] = [
   {
-    table: "members",
-    title: "Member Management",
-    description: "Manage members, profiles, QR codes and ID cards.",
-    path: "members",
+    name: "dashboard",
+    label: "Dashboard",
+    path: "/dashboard",
+    icon: LayoutDashboard,
+  },
+  {
+    name: "members",
+    label: "Members",
+    path: "/members",
+    icon: Users,
+  },
+  {
+    name: "payments",
+    label: "Payments",
+    path: "/payments",
+    icon: CreditCard,
+  },
+  {
+    name: "bank",
+    label: "Bank Transactions",
+    path: "/bank",
+    icon: Building2,
+  },
+  {
+    name: "qr",
+    label: "QR Verification",
+    path: "/qr",
+    icon: QrCode,
+  },
+  {
+    name: "idcards",
+    label: "ID Cards",
+    path: "/idcards",
+    icon: IdCard,
+  },
+  {
+    name: "reports",
+    label: "Reports",
+    path: "/reports",
+    icon: BarChart3,
+  },
+  {
+    name: "events",
+    label: "Events",
+    path: "/events",
+    icon: CalendarDays,
+  },
+  {
+    name: "notifications",
+    label: "Notifications",
+    path: "/notifications",
+    icon: Bell,
+  },
+  {
+    name: "documents",
+    label: "Documents",
+    path: "/documents",
+    icon: FileText,
+  },
+  {
+    name: "users",
+    label: "User Management",
+    path: "/users",
+    icon: ShieldCheck,
     adminOnly: true,
-    searchable: [
-      "member_id",
-      "membership_number",
-      "full_name",
-      "mobile_number",
-      "studio_name",
-      "village",
-    ],
-    fields: [
-      {
-        name: "member_id",
-        label: "Member ID",
-        type: "text",
-        readonly: true,
-      },
-      {
-        name: "full_name",
-        label: "Full Name",
-        type: "text",
-        required: true,
-      }
-    ]
-  }
-
+  },
+  {
+    name: "settings",
+    label: "Settings",
+    path: "/settings",
+    icon: Settings,
+    adminOnly: true,
+  },
 ];
