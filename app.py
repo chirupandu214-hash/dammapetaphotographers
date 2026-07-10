@@ -1,10 +1,29 @@
-from flask import Flask
+import { useEffect } from "react";
+import { supabase } from "./lib/supabase";
 
-app = Flask(__name__)
+export default function App() {
 
-@app.route("/")
-def home():
-    return "Backend Running"
+  useEffect(() => {
 
-if __name__ == "__main__":
-    app.run()
+    async function testConnection() {
+
+      const { data, error } = await supabase
+        .from("members")
+        .select("*");
+
+      console.log(data);
+
+      console.log(error);
+
+    }
+
+    testConnection();
+
+  }, []);
+
+  return (
+    <div className="min-h-screen flex items-center justify-center text-3xl font-bold">
+      Dhammapeta Photographers Association Portal
+    </div>
+  );
+}
