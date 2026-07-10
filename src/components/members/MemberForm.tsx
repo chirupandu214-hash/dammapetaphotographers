@@ -8,6 +8,10 @@ import {
 
 interface Props {
   onSaved?: () => void;
+
+  editMode?: boolean;
+
+  initialData?: MemberFormData;
 }
 
 interface MemberFormData {
