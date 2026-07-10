@@ -1,6 +1,16 @@
+import { useEffect, useState } from "react";
+
 import {
-  uploadMemberPhoto
+  addMember,
+  updateMember,
+  getNextMemberId,
+} from "@/services/memberService";
+
+import {
+  uploadMemberPhoto,
 } from "@/services/storageService";
+
+
 interface MemberFormData {
 
   id?: number;
@@ -22,21 +32,6 @@ interface MemberFormData {
   dob: string;
 
   blood_group: string;
-  <div>
-
-<label>
- Member Photo
-</label>
-
-<br/>
-
-<input
- type="file"
- accept="image/*"
- onChange={handlePhoto}
-/>
-
-</div>
 
   studio_name: string;
 
@@ -51,144 +46,390 @@ interface MemberFormData {
   status: string;
 
 }
-let photoUrl =
-  form.photo;
+
+
+
+interface Props {
+
+  editMode?: boolean;
+
+  initialData?: MemberFormData;
+
+  onSaved?:()=>void;
+
+}
+
+
+
+export default function MemberForm({
+
+ editMode=false,
+
+ initialData,
+
+ onSaved,
+
+}:Props){
+
+
+const [loading,setLoading]=
+useState(false);
+
+
+const [photoFile,setPhotoFile]=
+useState<File|null>(null);
+
+
+
+const [form,setForm]=
+useState<MemberFormData>({
+
+member_id:"",
+
+full_name:"",
+
+father_name:"",
+
+mobile:"",
+
+aadhaar:"",
+
+email:"",
+
+gender:"Male",
+
+dob:"",
+
+blood_group:"",
+
+studio_name:"",
+
+address:"",
+
+join_date:"",
+
+photo:"",
+
+role:"Member",
+
+status:"Active",
+
+});
+
+
+
+useEffect(()=>{
+
+
+async function load(){
+
+
+if(editMode && initialData){
+
+setForm(initialData);
+
+return;
+
+}
+
+
+
+const id =
+await getNextMemberId();
+
+
+setForm(prev=>({
+
+...prev,
+
+member_id:id
+
+}));
+
+
+}
+
+
+load();
+
+
+},[editMode,initialData]);
+
+
+
+
+function change(
+e:React.ChangeEvent<HTMLInputElement>
+){
+
+setForm({
+
+...form,
+
+[e.target.name]:
+e.target.value
+
+});
+
+
+}
+
+
+
+function photoChange(
+e:React.ChangeEvent<HTMLInputElement>
+){
+
+const file =
+e.target.files?.[0];
+
+
+if(file){
+
+setPhotoFile(file);
+
+}
+
+
+}
+
+
+
+
+async function submit(
+e:React.FormEvent
+){
+
+e.preventDefault();
+
+
+try{
+
+
+setLoading(true);
+
+
+let photo=form.photo;
+
 
 
 if(photoFile){
 
-  photoUrl =
-    await uploadMemberPhoto(
-      photoFile
-    );
+photo =
+await uploadMemberPhoto(
+photoFile
+);
 
 }
 
 
-const finalData = {
 
- ...form,
+const data={
 
- photo: photoUrl
+...form,
+
+photo
 
 };
-async function handleSubmit(
-  e: React.FormEvent<HTMLFormElement>
-) {
-  e.preventDefault();
 
 
-  // Validation
 
-  if (form.full_name.trim() === "") {
-    alert("Full Name is required.");
-    return;
-  }
+if(editMode && initialData?.id){
 
 
-  if (form.mobile.trim().length !== 10) {
-    alert("Enter valid mobile number.");
-    return;
-  }
+await updateMember(
 
+initialData.id,
 
-  if (
-    form.aadhaar.trim() !== "" &&
-    form.aadhaar.trim().length !== 12
-  ) {
-    alert("Enter valid Aadhaar number.");
-    return;
-  }
+data
 
-
-  try {
-
-    setLoading(true);
-    const [photoFile,setPhotoFile] =
-  useState<File | null>(null);
-
-
-    if (editMode && initialData) {
-
-      await updateMember(
- Number(initialData.id),
- finalData
 );
-function handlePhoto(
-  e: React.ChangeEvent<HTMLInputElement>
-){
-
-  const file =
-    e.target.files?.[0];
 
 
-  if(file){
+alert(
+"Member Updated"
+);
 
-    setPhotoFile(file);
-
-  }
 
 }
-      alert(
-        "Member updated successfully."
-      );
+
+else{
 
 
-    } else {
+await addMember(data);
 
 
-      await addMember(finalData);
+alert(
+"Member Added"
+);
 
 
-      alert(
-        "Member added successfully."
-      );
+}
 
 
-      const nextId =
-        await getNextMemberId();
 
 
-      setForm({
-        member_id: nextId,
-        full_name: "",
-        father_name: "",
-        mobile: "",
-        aadhaar: "",
-        email: "",
-        gender: "Male",
-        dob: "",
-        blood_group: "",
-        studio_name: "",
-        address: "",
-        join_date: "",
-        photo: "",
-        role: "Member",
-        status: "Active",
-      });
-
-    }
+onSaved?.();
 
 
-    onSaved?.();
+}
+
+catch(error){
 
 
-  } catch(error) {
+console.error(error);
 
 
-    console.error(error);
+alert(
+"Save Failed"
+);
 
 
-    alert(
-      "Operation failed."
-    );
+}
+
+finally{
+
+setLoading(false);
+
+}
 
 
-  } finally {
+}
 
 
-    setLoading(false);
 
 
-  }
+return(
+
+<form
+onSubmit={submit}
+>
+
+
+<h2>
+Member Form
+</h2>
+
+
+<input
+
+name="member_id"
+
+value={form.member_id}
+
+readOnly
+
+placeholder="Member ID"
+
+/>
+
+
+
+<input
+
+name="full_name"
+
+value={form.full_name}
+
+onChange={change}
+
+placeholder="Full Name"
+
+/>
+
+
+
+<input
+
+name="father_name"
+
+value={form.father_name}
+
+onChange={change}
+
+placeholder="Father Name"
+
+/>
+
+
+
+<input
+
+name="mobile"
+
+value={form.mobile}
+
+onChange={change}
+
+placeholder="Mobile"
+
+/>
+
+
+
+<input
+
+name="aadhaar"
+
+value={form.aadhaar}
+
+onChange={change}
+
+placeholder="Aadhaar"
+
+/>
+
+
+
+<input
+
+name="studio_name"
+
+value={form.studio_name}
+
+onChange={change}
+
+placeholder="Studio Name"
+
+/>
+
+
+
+<input
+
+type="file"
+
+accept="image/*"
+
+onChange={photoChange}
+
+/>
+
+
+
+<button
+disabled={loading}
+>
+
+{
+loading
+?
+"Saving..."
+:
+editMode
+?
+"Update Member"
+:
+"Save Member"
+}
+
+</button>
+
+
+
+</form>
+
+);
+
+
 }
