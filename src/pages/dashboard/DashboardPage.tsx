@@ -1,20 +1,44 @@
 import React from "react";
 
+import {
+useAuth
+}
+from "@/hooks/useAuth";
+
 
 export default function DashboardPage(){
 
- return(
-  <div style={{padding:40}}>
 
-   <h1>
-    Dashboard
-   </h1>
+const {
+profile
+}=useAuth();
 
-   <p>
-    Welcome Admin
-   </p>
 
-  </div>
- );
+
+return(
+
+<div>
+
+
+<h1>
+Dashboard
+</h1>
+
+
+<h2>
+Welcome {profile?.name}
+</h2>
+
+
+<p>
+Role : {profile?.role}
+</p>
+
+
+
+</div>
+
+);
+
 
 }
