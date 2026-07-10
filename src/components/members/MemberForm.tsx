@@ -138,7 +138,7 @@ function handlePhoto(
     } else {
 
 
-      await addMember(form);
+      await addMember(finalData);
 
 
       alert(
