@@ -29,6 +29,18 @@ export default function MembersPage() {
   useEffect(() => {
     loadMembers();
   }, []);
+  async function handleDelete(id: number) {
+  try {
+    await deleteMember(id);
+
+    await loadMembers();
+
+    alert("Member deleted successfully.");
+  } catch (error) {
+    console.error(error);
+    alert("Failed to delete member.");
+  }
+}
 
   const filteredMembers = useMemo(() => {
     const keyword = search.toLowerCase();
