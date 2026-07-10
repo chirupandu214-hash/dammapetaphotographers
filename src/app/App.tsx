@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import LoginPage from "@/pages/LoginPage";
 import DashboardPage from "@/pages/DashboardPage";
@@ -9,90 +9,39 @@ import BankTransactionsPage from "@/pages/bank/BankTransactionsPage";
 import QRVerificationPage from "@/pages/qr/QRVerificationPage";
 
 
-function ProtectedRoute({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-
-  const user = localStorage.getItem("user");
-
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-
-  return children;
-}
-
-
-export default function App() {
-
+function App() {
   return (
     <BrowserRouter>
-
       <Routes>
 
-        {/* Login */}
-        <Route
-          path="/login"
-          element={<LoginPage />}
+        <Route 
+          path="/" 
+          element={<LoginPage />} 
         />
 
-
-        {/* Dashboard */}
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <DashboardPage />
-            </ProtectedRoute>
-          }
+        <Route 
+          path="/dashboard" 
+          element={<DashboardPage />} 
         />
 
-
-        {/* Members */}
-        <Route
-          path="/members/profile"
-          element={
-            <ProtectedRoute>
-              <MemberProfilePage />
-            </ProtectedRoute>
-          }
+        <Route 
+          path="/members/profile" 
+          element={<MemberProfilePage />} 
         />
 
-
-        {/* Bank */}
-        <Route
-          path="/bank/transactions"
-          element={
-            <ProtectedRoute>
-              <BankTransactionsPage />
-            </ProtectedRoute>
-          }
+        <Route 
+          path="/bank/transactions" 
+          element={<BankTransactionsPage />} 
         />
 
-
-        {/* QR Verification */}
-        <Route
-          path="/qr-verification"
-          element={
-            <ProtectedRoute>
-              <QRVerificationPage />
-            </ProtectedRoute>
-          }
-        />
-
-
-        {/* Wrong URL */}
-        <Route
-          path="*"
-          element={
-            <Navigate to="/" replace />
-          }
+        <Route 
+          path="/qr-verification" 
+          element={<QRVerificationPage />} 
         />
 
       </Routes>
-
     </BrowserRouter>
   );
 }
+
+export default App;
