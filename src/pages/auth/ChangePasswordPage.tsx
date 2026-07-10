@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/hooks/useAuth";
@@ -9,11 +9,13 @@ import { Button } from "@/components/ui/Button";
 export function ChangePasswordPage() {
   const { profile, refreshProfile } = useAuth();
 
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
-  async function submit(e: React.FormEvent) {
+  const submit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
 
     if (password.length < 8) {
@@ -36,26 +38,40 @@ export function ChangePasswordPage() {
       if (error) throw error;
 
       if (profile?.id) {
-        await supabase
+        const { error: profileError } = await supabase
           .from("profiles")
-          .update({ must_change_password: false })
+          .update({
+            must_change_password: false,
+          })
           .eq("id", profile.id);
+
+        if (profileError) throw profileError;
       }
 
       await refreshProfile();
 
+      setPassword("");
+      setConfirmPassword("");
+
       toast.success("Password changed successfully.");
-    } catch (error: any) {
-      toast.error(error.message || "Unable to change password.");
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Unable to change password.";
+
+      toast.error(message);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md p-6">
-        <h1 className="mb-2 text-2xl font-bold">Change Password</h1>
+        <h1 className="mb-2 text-2xl font-bold">
+          Change Password
+        </h1>
 
         <p className="mb-6 text-sm text-muted-foreground">
           For security, you must change your default password before continuing.
@@ -64,21 +80,29 @@ export function ChangePasswordPage() {
         <form onSubmit={submit} className="space-y-4">
           <Input
             type="password"
-            placeholder="New password"
+            placeholder="New Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(
+              e: React.ChangeEvent<HTMLInputElement>
+            ) => setPassword(e.target.value)}
             required
           />
 
           <Input
             type="password"
-            placeholder="Confirm new password"
+            placeholder="Confirm Password"
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            onChange={(
+              e: React.ChangeEvent<HTMLInputElement>
+            ) => setConfirmPassword(e.target.value)}
             required
           />
 
-          <Button className="w-full" disabled={loading}>
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={loading}
+          >
             {loading ? "Updating..." : "Change Password"}
           </Button>
         </form>
