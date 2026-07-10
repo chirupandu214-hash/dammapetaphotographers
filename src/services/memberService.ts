@@ -1,13 +1,13 @@
 import { supabase } from "@/lib/supabase";
 
-export async function getMembers() {
-  const { data, error } = await supabase
+export async function deleteMember(id: number) {
+  const { error } = await supabase
     .from("members")
-    .select("*")
-    .order("id");
+    .delete()
+    .eq("id", id);
 
   if (error) throw error;
-
+}
   return data;
 }
 
