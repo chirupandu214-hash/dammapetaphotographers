@@ -1,97 +1,124 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {useState} from "react";
+import {supabase} from "@/lib/supabase";
+import {useNavigate} from "react-router-dom";
 
-export default function LoginPage() {
-  const navigate = useNavigate();
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [role, setRole] = useState("member");
+export default function LoginPage(){
 
-  const login = () => {
-    // Demo Login
-    if (
-      role === "admin" &&
-      username === "admin" &&
-      password === "admin123"
-    ) {
-      navigate("/admin/dashboard");
-      return;
-    }
 
-    if (
-      role === "member" &&
-      username === "member" &&
-      password === "123456"
-    ) {
-      navigate("/member/dashboard");
-      return;
-    }
+const [email,setEmail]=useState("");
 
-    alert("Invalid Username or Password");
-  };
+const [password,setPassword]=useState("");
 
-  return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        background: "#f3f4f6",
-      }}
-    >
-      <div
-        style={{
-          width: 380,
-          background: "#fff",
-          padding: 30,
-          borderRadius: 10,
-          boxShadow: "0 0 10px #ccc",
-        }}
-      >
-        <h2 align="center">📸 Dammapeta Photographers Portal</h2>
+const navigate=useNavigate();
 
-        <input
-          placeholder="Username"
-          style={{ width: "100%", padding: 10, marginTop: 20 }}
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
 
-        <input
-          type="password"
-          placeholder="Password"
-          style={{ width: "100%", padding: 10, marginTop: 10 }}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
 
-        <select
-          style={{ width: "100%", padding: 10, marginTop: 10 }}
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-        >
-          <option value="member">Member</option>
-          <option value="admin">Admin</option>
-        </select>
+async function login(){
 
-        <button
-          onClick={login}
-          style={{
-            width: "100%",
-            padding: 12,
-            marginTop: 20,
-            background: "#2563eb",
-            color: "#fff",
-            border: "none",
-            cursor: "pointer",
-            borderRadius: 6,
-          }}
-        >
-          Login
-        </button>
-      </div>
-    </div>
-  );
+
+const {error}=await supabase.auth.signInWithPassword({
+
+email,
+
+password
+
+});
+
+
+if(!error){
+
+navigate("/dashboard");
+
+}
+
+
+}
+
+
+
+
+return (
+
+<div className="
+min-h-screen
+flex
+items-center
+justify-center
+bg-gray-100
+">
+
+
+<div className="
+bg-white
+p-6
+rounded-xl
+shadow
+w-96
+">
+
+
+<h1 className="
+text-2xl
+font-bold
+mb-5
+">
+
+Admin Login
+
+</h1>
+
+
+<input
+
+className="input mb-3"
+
+placeholder="Email"
+
+onChange={(e)=>
+setEmail(e.target.value)
+}
+
+/>
+
+
+<input
+
+className="input mb-3"
+
+type="password"
+
+placeholder="Password"
+
+onChange={(e)=>
+setPassword(e.target.value)
+}
+
+/>
+
+
+<button
+
+onClick={login}
+
+className="
+bg-blue-600
+text-white
+w-full
+py-3
+rounded-lg
+">
+
+Login
+
+</button>
+
+
+</div>
+
+
+</div>
+
+);
+
 }
