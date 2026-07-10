@@ -1,4 +1,4 @@
-import { Member } from "@/types/member";
+import type { Member } from "@/types/member";
 
 interface Props {
   members: Member[];
@@ -13,43 +13,26 @@ export default function MemberTable({ members }: Props) {
       }}
     >
       <thead>
-        <tr
-          style={{
-            background: "#1976d2",
-            color: "#fff",
-          }}
-        >
+        <tr>
           <th>ID</th>
-
           <th>Member ID</th>
-
           <th>Name</th>
-
           <th>Mobile</th>
-
           <th>Studio</th>
-
           <th>Role</th>
-
           <th>Status</th>
         </tr>
       </thead>
 
       <tbody>
-        {members.map((member) => (
+        {members.map((member: any) => (
           <tr key={member.id}>
             <td>{member.id}</td>
-
-            <td>{member.memberId}</td>
-
-            <td>{member.fullName}</td>
-
+            <td>{member.member_id}</td>
+            <td>{member.full_name}</td>
             <td>{member.mobile}</td>
-
-            <td>{member.studioName}</td>
-
+            <td>{member.studio_name}</td>
             <td>{member.role}</td>
-
             <td>{member.status}</td>
           </tr>
         ))}
