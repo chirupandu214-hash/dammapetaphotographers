@@ -4,7 +4,10 @@ interface Props {
 
 }
 
-export default function MemberTable({ members }: Props) {
+export default function MemberTable({
+  members,
+  onDelete,
+}: Props) {
   if (members.length === 0) {
     return (
       <h3
