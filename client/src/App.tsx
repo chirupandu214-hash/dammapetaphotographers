@@ -5,14 +5,13 @@ import { LoginPage } from './pages/LoginPage';
 import { Dashboard } from './pages/dashboard/Dashboard';
 import { MembersPage } from './pages/MembersPage';
 
-// ErrorBoundary కి బదులుగా ఫాల్‌బ్యాక్ UI
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { session, loading } = useAuth();
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className="text-white">Loading...</div>;
   return session ? children : <Navigate to="/login" replace />;
 };
 
-export default function App() { // ఇక్కడ 'export default' యాడ్ చేశాను
+export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
