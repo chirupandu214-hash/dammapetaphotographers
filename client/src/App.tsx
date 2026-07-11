@@ -5,11 +5,12 @@ import { LoginPage } from './pages/LoginPage';
 import { Dashboard } from './pages/dashboard/Dashboard';
 import { MembersPage } from './pages/MembersPage';
 
-// లాగిన్ అయ్యి ఉన్నారో లేదో చెక్ చేసే ప్రొటెక్టెడ్ రౌట్
+// ప్రొటెక్టెడ్ రౌట్: లాగిన్ అయిన వారికి మాత్రమే పేజీలను చూపిస్తుంది
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { session, loading } = useAuth();
   
   if (loading) {
+    // యాప్ లోడ్ అవుతున్నప్పుడు కనిపించే UI
     return <div className="h-screen flex items-center justify-center bg-slate-950 text-white">Loading...</div>;
   }
   
@@ -21,17 +22,17 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          {/* రూట్ పాత్ లోకి రాగానే లాగిన్ పేజీకి పంపడం */}
-          <Route path="/" element={<Navigate to="/login" replace />} />
+          {/* పబ్లిక్ రౌట్స్ */}
           <Route path="/login" element={<LoginPage />} />
 
-          {/* డ్యాష్‌బోర్డ్ లేఅవుట్ తో ఉన్న ప్రొటెక్టెడ్ రౌట్స్ */}
+          {/* ప్రొటెక్టెడ్ రౌట్స్ (DashboardLayout తో కలిపి) */}
           <Route path="/" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
+            <Route index element={<Navigate to="/dashboard" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="members" element={<MembersPage />} />
           </Route>
 
-          {/* ఏవైనా తప్పు URLలు వస్తే తిరిగి లాగిన్ లేదా డ్యాష్‌బోర్డ్ కి పంపడం */}
+          {/* తప్పు URL టైప్ చేస్తే లాగిన్ పేజీకి పంపడం */}
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </BrowserRouter>
