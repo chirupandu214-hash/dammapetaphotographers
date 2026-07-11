@@ -1,0 +1,41 @@
+services:
+  # 1. బ్యాక్ఎండ్ డిప్లాయ్మెంట్ (Node.js REST API)
+  - type: web
+    name: dammapeta-portal-api
+    env: node
+    rootDir: server
+    plan: free
+    buildCommand: npm install && npx tsc
+    startCommand: node dist/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: CLIENT_URL
+        value: https://dammapeta-portal-client.onrender.com # ఫ్రంట్ఎండ్ డిప్లాయ్ అయ్యాక లింక్ మార్చుకోవచ్చు
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+
+  # 2. ఫ్రంట్ఎండ్ డిప్లాయ్మెంట్ (React 18 Static Site)
+  - type: static
+    name: dammapeta-portal-client
+    rootDir: client
+    buildCommand: npm install && npm run build
+    publishDir: dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        value: https://dammapeta-portal-api.onrender.com/api/v1 # బ్యాక్ఎండ్ లింక్
+      - key: VITE_SUPABASE_URL
+        sync: false
+      - key: VITE_SUPABASE_ANON_KEY
+        sync: false
+    # React Router కోసం పేజీ రిఫ్రెష్ చేసినప్పుడు 404 ఎర్రర్ రాకుండా ఉండటానికి
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
