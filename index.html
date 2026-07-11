@@ -41,5 +41,23 @@
         </div>
     </div>
     <script src="script.js"></script>
+    <!-- Fee Collection Section -->
+<section id="fees" class="hidden">
+    <h2>Fee Collection</h2>
+    <div class="card">
+        <input type="text" id="feeAmount" placeholder="Amount">
+        <button onclick="DPA.recordFee()">Submit Payment</button>
+    </div>
+    <table id="feeTable">
+        <thead><tr><th>Receipt No</th><th>Amount</th><th>Date</th></tr></thead>
+        <tbody id="feeBody"></tbody>
+    </table>
+</section>
+
+<!-- Kutumbha Bharosa Section -->
+<section id="bharosa" class="hidden">
+    <h2>Kutumbha Bharosa</h2>
+    <!-- Add Nominee Form Here -->
+</section>
 </body>
 </html>
