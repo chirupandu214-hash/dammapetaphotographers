@@ -1,60 +1,61 @@
 import React from 'react';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement } from 'chart.js';
-import { Bar, Doughnut } from 'react-chartjs-2';
-import { HiOutlineUsers, HiOutlineCurrencyRupee, HiOutlineCreditCard, HiOutlineShieldCheck } from 'react-icons/hi';
+import { HiOutlineUsers, HiOutlineCurrencyRupee, HiOutlineCreditCard, HiOutlineDocumentReport } from 'react-icons/hi';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { Bar } from 'react-chartjs-2';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Title, Tooltip, Legend);
+// Chart.js సెటప్
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-export const Dashboard: React.FC = () => {
-  // తాత్కాలిక డమ్మీ డేటా (బ్యాక్ఎండ్ కనెక్ట్ అయ్యే వరకు)
-  const stats = {
-    totalMembers: 124,
-    totalFund: '8,50,000',
-    activeLoansAmount: '3,20,000',
-    welfareMembers: 98
-  };
-
-  const kpiCards = [
-    { title: 'Total Members', value: stats.totalMembers, icon: HiOutlineUsers, color: 'from-blue-500 to-cyan-500' },
-    { title: 'Yearly Fund', value: `₹${stats.totalFund}`, icon: HiOutlineCurrencyRupee, color: 'from-emerald-500 to-teal-500' },
-    { title: 'Active Loans', value: `₹${stats.activeLoansAmount}`, icon: HiOutlineCreditCard, color: 'from-amber-500 to-orange-500' },
-    { title: 'Kutumbha Bharosha', value: stats.welfareMembers, icon: HiOutlineShieldCheck, color: 'from-purple-500 to-indigo-500' },
+export const Dashboard = () => {
+  // స్టాటిస్టిక్స్ డేటా (దీనిని మీరు సుపాబేస్ నుండి ఫెచ్ చేయాలి)
+  const stats = [
+    { title: 'Total Members', value: '150', icon: HiOutlineUsers, color: 'text-blue-400' },
+    { title: 'Monthly Collection', value: '₹ 45,000', icon: HiOutlineCurrencyRupee, color: 'text-green-400' },
+    { title: 'Active Loans', value: '12', icon: HiOutlineCreditCard, color: 'text-amber-400' },
+    { title: 'Pending Funds', value: '₹ 12,500', icon: HiOutlineDocumentReport, color: 'text-red-400' },
   ];
 
-  return (
-    <div className="space-y-6 animate-fadeIn">
-      <div>
-        <h1 className="text-2xl font-bold text-white">Dashboard Overview</h1>
-        <p className="text-sm text-slate-400 mt-1">Welcome to Dammapeta Photographers Association Portal.</p>
-      </div>
+  // చార్ట్ డేటా
+  const data = {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+    datasets: [{
+      label: 'Monthly Collections (₹)',
+      data: [12000, 19000, 3000, 5000, 20000, 30000],
+      backgroundColor: 'rgba(245, 158, 11, 0.5)', // Amber color
+    }]
+  };
 
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {kpiCards.map((card, index) => (
-          <div key={index} className="bg-slate-950 p-6 rounded-2xl border border-slate-800 shadow-xl flex justify-between items-center">
-            <div>
-              <p className="text-xs font-medium uppercase text-slate-400">{card.title}</p>
-              <p className="text-2xl font-extrabold text-white mt-2">{card.value}</p>
-            </div>
-            <div className={`p-3 rounded-xl bg-gradient-to-tr ${card.color} text-white shadow-lg`}>
-              <card.icon className="w-6 h-6" />
+  return (
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold text-white mb-6">Dashboard Overview</h2>
+      
+      {/* Statistics Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {stats.map((stat, index) => (
+          <div key={index} className="p-6 bg-slate-900 border border-slate-800 rounded-xl hover:border-slate-700 transition-all">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-slate-400 text-sm">{stat.title}</p>
+                <h3 className="text-2xl font-bold mt-1 text-white">{stat.value}</h3>
+              </div>
+              <stat.icon className={`w-8 h-8 ${stat.color}`} />
             </div>
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-slate-950 p-6 rounded-2xl border border-slate-800">
-          <h3 className="text-base font-semibold text-white mb-4">Collection Overview</h3>
-          <div className="h-64 flex items-center justify-center text-slate-500">
-            {/* Chart will go here once backend is ready */}
-            [Bar Chart Placeholder]
-          </div>
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl">
+          <h3 className="text-lg font-semibold text-white mb-4">Collection Trends</h3>
+          <Bar data={data} options={{ responsive: true, plugins: { legend: { position: 'top' as const } } }} />
         </div>
-        <div className="bg-slate-950 p-6 rounded-2xl border border-slate-800">
-          <h3 className="text-base font-semibold text-white mb-4">Loan Status</h3>
+        
+        <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl">
+          <h3 className="text-lg font-semibold text-white mb-4">Loan Distribution</h3>
+          {/* ఇక్కడ మీరు మరొక చార్ట్ (Pie/Doughnut) యాడ్ చేయవచ్చు */}
           <div className="h-64 flex items-center justify-center text-slate-500">
-            {/* Chart will go here once backend is ready */}
-            [Doughnut Chart Placeholder]
+             Loan distribution chart coming soon
           </div>
         </div>
       </div>
