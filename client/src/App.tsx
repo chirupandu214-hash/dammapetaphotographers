@@ -34,7 +34,8 @@ function App() {
           {/* మిగతా పేజీలు ఇక్కడ యాడ్ చేద్దాం */}
         </Route>
         
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        
+<Route path="/login" element={<Login />} />
       </Routes>
     </AuthProvider>
   );
