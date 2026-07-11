@@ -1,17 +1,16 @@
-import express from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-import rateLimit from 'express-rate-limit';
-import financialRouter from './routes/financial.routes';
+import { useState } from 'react'
 
-const app = express();
+export default function App() {
+  const [count, setCount] = useState<number>(0)
 
-// Set foundational enterprise defensive headers
-app.use(helmet());
-app.use(cors({ origin: process.env.CORS_ORIGIN || '*', credentials: true }));
-app.use(express.json());
-
-// Bind isolated business logic sub-routing pipelines
-app.use('/api/v1', financialRouter);
-
-export default app;
+  return (
+    <div style={{ textAlign: 'center', marginTop: '50px', fontFamily: 'sans-serif' }}>
+      <h1>Vite + React Deployment Working!</h1>
+      <div style={{ margin: '20px' }}>
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+      </div>
+    </div>
+  )
+}
