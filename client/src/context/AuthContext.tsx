@@ -1,66 +1,61 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
+import { Session, User } from '@supabase/supabase-js';
 
 interface AuthContextType {
-  user: any;
+  user: User | null;
   role: 'super_admin' | 'member' | null;
-  isLoading: boolean;
+  session: Session | null;
+  loading: boolean;
   logout: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType>({
-  user: null,
-  role: null,
-  isLoading: true,
-  logout: async () => {},
-});
+const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<any>(null);
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [session, setSession] = useState<Session | null>(null);
   const [role, setRole] = useState<'super_admin' | 'member' | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        setUser(session.user);
-        // రోల్ తీసుకురావడం
-        const { data } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('id', session.user.id)
-          .single();
-        setRole(data?.role || 'member');
-      }
-      setIsLoading(false);
-    };
+    // 1. సెషన్ వివరాలు పొందడం
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      fetchRole(session?.user);
+    });
 
-    fetchSession();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      setUser(session?.user || null);
-      if (session?.user) {
-        const { data } = await supabase.from('profiles').select('role').eq('id', session.user.id).single();
-        setRole(data?.role || 'member');
-      } else {
-        setRole(null);
-      }
-      setIsLoading(false);
+    // 2. సెషన్ మారినప్పుడు (Login/Logout) ఆటోమేటిక్ గా అప్‌డేట్ అవ్వడం
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      fetchRole(session?.user);
+      setLoading(false);
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
+  // అడ్మిన్ లేదా మెంబర్ రోల్ పొందడం (Supabase Profile టేబుల్ నుండి)
+  const fetchRole = async (user: User | undefined) => {
+    if (user) {
+      const { data } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+      setRole(data?.role);
+    } else {
+      setRole(null);
+    }
+    setLoading(false);
+  };
+
   const logout = async () => {
     await supabase.auth.signOut();
-    setUser(null);
-    setRole(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, role, isLoading, logout }}>
-      {children}
+    <AuthContext.Provider value={{ user: session?.user ?? null, role, session, loading, logout }}>
+      {!loading && children}
     </AuthContext.Provider>
   );
 };
