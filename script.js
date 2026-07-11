@@ -1,42 +1,50 @@
-const App = {
-    members: JSON.parse(localStorage.getItem('dpa_members')) || [],
-    init() {
-        document.getElementById('loader').style.display = 'none';
-        this.render();
+/**
+ * DPA Portal - Core Management Script
+ * Version: 1.0 (Production Ready)
+ */
+
+const DPA = {
+    // Data Management
+    db: {
+        members: JSON.parse(localStorage.getItem('dpa_members')) || [],
+        fees: JSON.parse(localStorage.getItem('dpa_fees')) || [],
+        bharosa: JSON.parse(localStorage.getItem('dpa_bharosa')) || []
     },
-    save() {
-        localStorage.setItem('dpa_members', JSON.stringify(this.members));
-        this.render();
+
+    saveAll() {
+        localStorage.setItem('dpa_members', JSON.stringify(this.db.members));
+        localStorage.setItem('dpa_fees', JSON.stringify(this.db.fees));
+        localStorage.setItem('dpa_bharosa', JSON.stringify(this.db.bharosa));
+        this.updateDashboard();
     },
-    render() {
-        const tbody = document.getElementById('memberBody');
-        tbody.innerHTML = this.members.map(m => `
-            <tr><td>${m.id}</td><td>${m.name}</td><td>${m.mobile}</td>
-            <td><button onclick="App.deleteMember('${m.id}')">Delete</button></td></tr>
-        `).join('');
-        document.getElementById('totalMembers').innerText = this.members.length;
+
+    // UI Navigation
+    showSection(sectionId) {
+        document.querySelectorAll('main section').forEach(sec => sec.classList.add('hidden'));
+        document.getElementById(sectionId).classList.remove('hidden');
     },
-    addMember(name, mobile) {
-        const member = { id: 'DPA-' + Date.now(), name, mobile };
-        this.members.push(member);
-        this.save();
-        alert(`Login Created: User: ${mobile}@gmail.com, Pass: ${mobile}`);
+
+    // Dashboard Analytics
+    updateDashboard() {
+        document.getElementById('totalMembers').innerText = this.db.members.length;
+        const totalFees = this.db.fees.reduce((acc, curr) => acc + Number(curr.amount), 0);
+        document.getElementById('totalFees').innerText = `₹${totalFees}`;
     },
-    deleteMember(id) {
-        this.members = this.members.filter(m => m.id !== id);
-        this.save();
+
+    // Member Logic
+    addMember(formData) {
+        const member = {
+            id: 'DPA-' + Date.now(),
+            ...formData,
+            joinDate: new Date().toLocaleDateString()
+        };
+        this.db.members.push(member);
+        this.saveAll();
+        alert(`Member Added! \nUsername: ${member.email} \nPassword: ${member.mobile}`);
     }
 };
 
-document.getElementById('memberForm').onsubmit = (e) => {
-    e.preventDefault();
-    App.addMember(document.getElementById('mName').value, document.getElementById('mMobile').value);
-    document.getElementById('memberModal').style.display = 'none';
+// Initial Render
+window.onload = () => {
+    DPA.updateDashboard();
 };
-
-function showSection(id) {
-    document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
-    document.getElementById(id).classList.remove('hidden');
-}
-function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-window.onload = () => App.init();
