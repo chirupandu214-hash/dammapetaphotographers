@@ -16,11 +16,17 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
-            <Route index element={<Navigate to="/dashboard" replace />} />
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="members" element={<MembersPage />} />
+          <Routes>
+  {/* రూట్ పాత్ లోకి రాగానే లాగిన్ కి పంపేలా */}
+  <Route path="/" element={<Navigate to="/login" replace />} />
+  <Route path="/login" element={<LoginPage />} />
+  
+  {/* మిగిలిన ప్రొటెక్టెడ్ రౌట్స్ */}
+  <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
+    <Route path="/dashboard" element={<Dashboard />} />
+    <Route path="/members" element={<MembersPage />} />
+  </Route>
+</Routes>
           </Route>
         </Routes>
       </BrowserRouter>
