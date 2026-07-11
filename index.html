@@ -3,36 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>దమ్మపేట ఫోటోగ్రాఫర్స్ అసోసియేషన్</title>
+    <title>Dammapeta Photographers Association Portal</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <div id="loader"><h1>DPA Portal Loading...</h1></div>
     <nav>
-        <div class="logo">దమ్మపేట అసోసియేషన్</div>
+        <div class="logo">DPA Dammapeta</div>
         <ul>
-            <li><a href="#" onclick="showSection('dashboard')">డ్యాష్‌బోర్డ్</a></li>
-            <li><a href="#" onclick="showSection('members')">సభ్యులు</a></li>
-            <li><a href="#" onclick="showSection('fees')">ఫీజులు</a></li>
+            <li><a href="#" onclick="showSection('dashboard')">Dashboard</a></li>
+            <li><a href="#" onclick="showSection('members')">Members</a></li>
+            <li><a href="#" onclick="showSection('fees')">Fee Collection</a></li>
+            <li><button onclick="logout()">Logout</button></li>
         </ul>
     </nav>
-
     <main id="content">
         <section id="dashboard">
-            <h2>డ్యాష్‌బోర్డ్</h2>
-            <div class="stats">
-                <div class="card">మొత్తం సభ్యులు: <span id="count">0</span></div>
-            </div>
+            <div class="card"><h3>Total Members</h3><p id="totalMembers">0</p></div>
+            <canvas id="dpaChart"></canvas>
         </section>
-
         <section id="members" class="hidden">
-            <h2>సభ్యుల వివరాలు</h2>
-            <button onclick="addMember()">కొత్త సభ్యుడిని చేర్చండి</button>
+            <button onclick="openModal('memberModal')">Add Member</button>
             <table id="memberTable">
-                <thead><tr><th>పేరు</th><th>మొబైల్</th><th>యాక్షన్</th></tr></thead>
+                <thead><tr><th>ID</th><th>Name</th><th>Mobile</th><th>Actions</th></tr></thead>
                 <tbody id="memberBody"></tbody>
             </table>
         </section>
     </main>
+    <div id="memberModal" class="modal">
+        <div class="modal-content">
+            <form id="memberForm">
+                <input type="text" id="mName" placeholder="Full Name" required>
+                <input type="text" id="mMobile" placeholder="Mobile" required>
+                <button type="submit">Save & Generate Login</button>
+            </form>
+        </div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
