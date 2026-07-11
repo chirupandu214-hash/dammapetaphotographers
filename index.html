@@ -1,57 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="te">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dammapeta Photographers Association</title>
+    <title>దమ్మపేట ఫోటోగ్రాఫర్స్ అసోసియేషన్</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div id="loader">Loading...</div>
-    <nav id="navbar">
-        <div class="logo">DPA Portal</div>
-        <ul id="nav-links">
-            <li><a href="#" onclick="showSection('home')">Home</a></li>
-            <li><a href="#" onclick="showSection('members')">Members</a></li>
-            <li><a href="#" onclick="showSection('fee')">Fee Collection</a></li>
-            <li><a href="#" onclick="showSection('dashboard')">Dashboard</a></li>
-            <li><button onclick="logout()">Logout</button></li>
+    <nav>
+        <div class="logo">దమ్మపేట అసోసియేషన్</div>
+        <ul>
+            <li><a href="#" onclick="showSection('dashboard')">డ్యాష్‌బోర్డ్</a></li>
+            <li><a href="#" onclick="showSection('members')">సభ్యులు</a></li>
+            <li><a href="#" onclick="showSection('fees')">ఫీజులు</a></li>
         </ul>
     </nav>
 
     <main id="content">
-        <section id="home">
-            <h1>Welcome to Dammapeta Photographers Association</h1>
-            <p>Empowering creativity and professional growth.</p>
-        </section>
-        
-        <section id="dashboard" class="hidden">
-            <div class="stats-grid">
-                <div class="card"><h3>Members</h3><p id="totalMembers">0</p></div>
-                <div class="card"><h3>Monthly Fees</h3><p id="totalFees">₹0</p></div>
+        <section id="dashboard">
+            <h2>డ్యాష్‌బోర్డ్</h2>
+            <div class="stats">
+                <div class="card">మొత్తం సభ్యులు: <span id="count">0</span></div>
             </div>
-            <canvas id="memberChart"></canvas>
         </section>
 
         <section id="members" class="hidden">
-            <button onclick="openModal('memberModal')">+ Add Member</button>
-            <input type="text" id="memberSearch" placeholder="Search members..." onkeyup="filterMembers()">
+            <h2>సభ్యుల వివరాలు</h2>
+            <button onclick="addMember()">కొత్త సభ్యుడిని చేర్చండి</button>
             <table id="memberTable">
-                <thead><tr><th>ID</th><th>Name</th><th>Mobile</th><th>Actions</th></tr></thead>
+                <thead><tr><th>పేరు</th><th>మొబైల్</th><th>యాక్షన్</th></tr></thead>
                 <tbody id="memberBody"></tbody>
             </table>
         </section>
     </main>
-
-    <div id="memberModal" class="modal">
-        <form id="memberForm">
-            <input type="text" id="mName" placeholder="Full Name" required>
-            <input type="tel" id="mMobile" placeholder="Mobile" required>
-            <button type="submit">Save Member</button>
-        </form>
-    </div>
-
     <script src="script.js"></script>
 </body>
 </html>
