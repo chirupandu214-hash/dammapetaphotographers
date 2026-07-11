@@ -1,81 +1,32 @@
-import {
-createContext,
-useContext,
-useState
-}
-from "react";
+import React, { createContext, useContext, useState } from "react";
 
+type AuthContextType = {
+  user: any;
+  login: (user: any) => void;
+  logout: () => void;
+};
 
-const AuthContext =
-createContext<any>(null);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<any>(null);
 
+  const login = (user: any) => setUser(user);
+  const logout = () => setUser(null);
 
-export function AuthProvider({
-children
-}:{
-children:React.ReactNode
-}){
-
-
-const [user,setUser]=
-useState<any>(null);
-
-
-
-function login(data:any){
-
-setUser(data);
-
-localStorage.setItem(
-"user",
-JSON.stringify(data)
-);
-
+  return (
+    <AuthContext.Provider value={{ user, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
+export function useAuth() {
+  const context = useContext(AuthContext);
 
+  if (!context) {
+    throw new Error("useAuth must be used inside AuthProvider");
+  }
 
-function logout(){
-
-setUser(null);
-
-localStorage.removeItem(
-"user"
-);
-
-}
-
-
-
-return(
-
-<AuthContext.Provider
-
-value={{
-user,
-login,
-logout
-}}
-
->
-
-{children}
-
-</AuthContext.Provider>
-
-
-);
-
-
-}
-
-
-
-export function useAuth(){
-
-return useContext(
-AuthContext
-);
-
+  return context;
 }
