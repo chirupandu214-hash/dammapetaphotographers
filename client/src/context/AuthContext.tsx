@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
-import { Session, User } from '@supabase/supabase-js';
+import { Session } from '@supabase/supabase-js';
 
 const AuthContext = createContext<any>(null);
 
@@ -19,14 +19,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const fetchRole = async (userId: string) => {
     const { data } = await supabase.from('profiles').select('role').eq('id', userId).single();
-    setRole(data?.role);
+    setRole(data?.role || 'member');
     setLoading(false);
   };
 
-  const logout = async () => { await supabase.auth.signOut(); setSession(null); setRole(null); };
-
   return (
-    <AuthContext.Provider value={{ user: session?.user ?? null, role, session, loading, logout }}>
+    <AuthContext.Provider value={{ session, role, loading }}>
       {!loading && children}
     </AuthContext.Provider>
   );
