@@ -1,8 +1,7 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  // ఒకవేళ ఈ కింద ఉన్న లైన్ లేకపోతే, దీన్ని యాడ్ చేసి గిట్‌హబ్‌కు పుష్ చేయండి
-  base: '/', 
-})
+  base: './', // ఇది లేకపోతే సర్వర్ లో CSS ఫైల్స్ లోడ్ అవ్వవు
+});
